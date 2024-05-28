@@ -33,6 +33,9 @@ jobs:
       - name: Set execute permissions for PHPStan
         run: chmod +x vendor/bin/phpstan
 
+      - name: Debug changed files
+        run: echo "${{ steps.changed-files.outputs.files }}"
+
       - name: Run PHPStan
         run: |
             vendor/bin/phpstan analyse ${{ steps.changed-files.outputs.files }}
