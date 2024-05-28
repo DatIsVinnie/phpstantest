@@ -3,40 +3,41 @@ name: PHPStan
 on: [pull_request]
 
 jobs:
-  name: Run PHPStan
-  runs-on: ubuntu-latest
-
-  steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: Set up PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.0'
-        extensions: mbstring
-
-    - name: Install Composer dependencies
-      run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
-
-    - name: Get list of changed PHP files
-      id: changed-files
-      run: |
-        # Identificeer gewijzigde bestanden tussen de huidige branch en de main branch
-        changed_files=$(git diff --name-only main)
-
-        # Filter PHP-bestanden en sla ze op in een environment variable
-        php_files=$(echo "$changed_files" | grep '\.php$' || true)
-        echo "::set-output name=php_files::$php_files"
-
-    - name: Run PHPStan
-      run: |
-#          # Haal de lijst van gewijzigde PHP-bestanden op
-#          php_files="${{ steps.changed-files.outputs.php_files }}"
-
-        if [ -n "$php_files" ]; then
-          # Voer PHPStan uit op de gewijzigde PHP-bestanden
-          vendor/bin/phpstan analyse --level=7 --no-progress $php_files
-        else
-          echo "Geen PHP-bestanden gewijzigd. PHPStan wordt niet uitgevoerd."
-        fi
+  phpstan:
+    name: Run PHPStan
+    runs-on: ubuntu-latest
+  
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+  
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring
+  
+      - name: Install Composer dependencies
+        run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
+  
+      - name: Get list of changed PHP files
+        id: changed-files
+        run: |
+          # Identificeer gewijzigde bestanden tussen de huidige branch en de main branch
+          changed_files=$(git diff --name-only main)
+  
+          # Filter PHP-bestanden en sla ze op in een environment variable
+          php_files=$(echo "$changed_files" | grep '\.php$' || true)
+          echo "::set-output name=php_files::$php_files"
+  
+      - name: Run PHPStan
+        run: |
+  #          # Haal de lijst van gewijzigde PHP-bestanden op
+  #          php_files="${{ steps.changed-files.outputs.php_files }}"
+  
+          if [ -n "$php_files" ]; then
+            # Voer PHPStan uit op de gewijzigde PHP-bestanden
+            vendor/bin/phpstan analyse --level=7 --no-progress $php_files
+          else
+            echo "Geen PHP-bestanden gewijzigd. PHPStan wordt niet uitgevoerd."
+          fi
