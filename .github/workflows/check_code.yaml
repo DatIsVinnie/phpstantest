@@ -1,6 +1,6 @@
 # .github/workflows/phpstan.yml
 name: PHPStan
-
+          
 on: [pull_request]
 
 jobs:
@@ -37,7 +37,9 @@ jobs:
       - name: Set execute permissions for PHPStan
         run: chmod +x vendor/bin/phpstan
 
+
       - name: Run PHPStan
+        uses: OskarStark/phpstan-ga@1.13.0      
         run: |
           if [ -n "$FILES" ]; then
             vendor/bin/phpstan analyse $FILES
