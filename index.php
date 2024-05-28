@@ -5,8 +5,6 @@
 $naam = "John Doe";
 
 // Proberen de waarde van een niet-gedefinieerde variabele op te halen
-echo "Hallo, mijn naam is $name";
-
 
 // Een array met enkele gegevens
 $data = [
