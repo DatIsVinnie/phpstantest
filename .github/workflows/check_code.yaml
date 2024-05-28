@@ -19,22 +19,7 @@ jobs:
   
       - name: Install Composer dependencies
         run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
-  
-      - name: Get list of changed PHP files
-        id: changed-files
-        run: |
-          # Identificeer gewijzigde bestanden tussen de huidige branch en de main branch
-          changed_files=$(git diff --name-only -- main)
-  
-          # Filter PHP-bestanden en sla ze op in een environment variable
-          php_files=$(echo "$changed_files" | grep '\.php$' || true)
-          echo "::set-output name=php_files::$php_files"
-  
+
       - name: Run PHPStan
         run: |
-          if [ -n "$php_files" ]; then
-            # Voer PHPStan uit op de gewijzigde PHP-bestanden
-            vendor/bin/phpstan analyse --level=7 --no-progress $php_files
-          else
-            echo "Geen PHP-bestanden gewijzigd. PHPStan wordt niet uitgevoerd."
-          fi
+          vendor/bin/phpstan analyse --level=7 --no-progress $(git diff --name-only -- main)
