@@ -32,9 +32,6 @@ jobs:
   
       - name: Run PHPStan
         run: |
-  #          # Haal de lijst van gewijzigde PHP-bestanden op
-  #          php_files="${{ steps.changed-files.outputs.php_files }}"
-  
           if [ -n "$php_files" ]; then
             # Voer PHPStan uit op de gewijzigde PHP-bestanden
             vendor/bin/phpstan analyse --level=7 --no-progress $php_files
