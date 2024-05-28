@@ -24,7 +24,7 @@ jobs:
         id: changed-files
         run: |
           # Identificeer gewijzigde bestanden tussen de huidige branch en de main branch
-          changed_files=$(git diff --name-only main)
+          changed_files=$(git diff --name-only -- main)
   
           # Filter PHP-bestanden en sla ze op in een environment variable
           php_files=$(echo "$changed_files" | grep '\.php$' || true)
