@@ -20,7 +20,7 @@ jobs:
       - name: Get changed PHP files
         id: get_changed_files
         run: |
-          echo "CHANGED_FILES=$(git diff --name-only --diff-filter=d origin/main...HEAD | grep '\.php$')" >> $GITHUB_ENV
+          echo "CHANGED_FILES=$(git diff --name-only --diff-filter=d -- origin/main | grep '\.php$')" >> $GITHUB_ENV
 
       - name: Run PHPStan on changed files
         run: |
