@@ -6,3 +6,6 @@ $age = $data['age'];
 
 // Deze lijn zal een undefined index-waarschuwing veroorzaken omdat 'age' niet bestaat in de $data array
 echo "Age: $age";
+echo "Age: $age";
+echo "Age: $age";
+echo "Age: $age";
