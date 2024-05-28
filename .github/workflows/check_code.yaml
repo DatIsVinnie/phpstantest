@@ -24,7 +24,7 @@ jobs:
         id: changed-files
         run: |
           # Identificeer gewijzigde bestanden tussen de huidige branch en de main branch
-          changed_files=$(git diff --name-only origin/main)
+          changed_files=$(git diff --name-only main)
 
           # Filter PHP-bestanden en sla ze op in een environment variable
           php_files=$(echo "$changed_files" | grep '\.php$' || true)
@@ -32,8 +32,8 @@ jobs:
 
       - name: Run PHPStan
         run: |
-          # Haal de lijst van gewijzigde PHP-bestanden op
-          php_files="${{ steps.changed-files.outputs.php_files }}"
+#          # Haal de lijst van gewijzigde PHP-bestanden op
+#          php_files="${{ steps.changed-files.outputs.php_files }}"
 
           if [ -n "$php_files" ]; then
             # Voer PHPStan uit op de gewijzigde PHP-bestanden
