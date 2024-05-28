@@ -35,7 +35,4 @@ jobs:
 
       - name: Run PHPStan
         run: |
-            vendor/bin/phpstan analyse $FILES
-        env:
-          FILES: ${{ steps.changed-files.outputs.files }}
-
+            vendor/bin/phpstan analyse ${{ steps.changed-files.outputs.files }}
