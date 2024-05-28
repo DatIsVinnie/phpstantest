@@ -19,7 +19,7 @@ jobs:
 
       - name: Run PHPStan on changed files
         run: |
-          CHANGED_FILES=$(git diff --name-only --diff-filter=d --main | grep '\.php$')
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d - main | grep '\.php$')
           if [ -n "$CHANGED_FILES" ]; then
             vendor/bin/phpstan analyse --level=7 --no-progress $CHANGED_FILES
           else
