@@ -20,6 +20,9 @@ echo "Age: $age";
 echo "Age: $age";
 echo "Age: $age";
 echo "Age: $age";
+echo "Age: $age";
+echo "Age: $age";
+echo "Age: $age";
 
 
 
