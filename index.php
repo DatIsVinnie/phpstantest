@@ -5,7 +5,6 @@
 $naam = "John Doe";
 
 // Proberen de waarde van een niet-gedefinieerde variabele op te halen
-echo "Hallo, mijn naam is $name";
 
 
 // Een array met enkele gegevens
@@ -18,7 +17,6 @@ $data = [
 $age = $data['age'];
 
 // Deze lijn zal een undefined index-waarschuwing veroorzaken omdat 'age' niet bestaat in de $data array
-echo "Age: $age";
 
 
 
