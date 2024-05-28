@@ -23,7 +23,10 @@ jobs:
       - name: Get changed PHP files
         id: get_changed_files
         run: |
-          git diff --name-only origin/main --diff-filter=d | grep '\.php$' || echo "" > changed_files.txt
+          git diff --name-only origin/main --diff-filter=d | grep '\.php$' > changed_files.txt || echo "" > changed_files.txt
+
+      - name: Debug changed files
+        run: cat changed_files.txt
 
       - name: Run PHPStan on changed files
         run: |
