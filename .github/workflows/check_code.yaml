@@ -33,7 +33,6 @@ jobs:
       - name: Set execute permissions for PHPStan
         run: chmod +x vendor/bin/phpstan
 
-
       - name: Run PHPStan
         run: |
           if [ -n "$FILES" ]; then
@@ -41,3 +40,6 @@ jobs:
           else
             echo "No PHP files were modified."
           fi
+        env:
+          FILES: ${{ steps.changed-files.outputs.files }}
+
