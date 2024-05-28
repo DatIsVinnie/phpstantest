@@ -11,20 +11,33 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Setup PHPStan
-        uses: docker://phpstan/phpstan
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions: mbstring
+
+      - name: Install Composer dependencies
+        run: composer install
+
+      - name: Get list of changed PHP files
+        id: changed-files
+        run: |
+          # Identificeer gewijzigde bestanden
+          changed_files=$(git diff --name-only HEAD^ HEAD)
+
+          # Filter PHP-bestanden en sla ze op in een environment variable
+          php_files=$(echo "$changed_files" | grep '\.php$' || true)
+          echo "::set-output name=php_files::$php_files"
 
       - name: Run PHPStan
         run: |
-          # Identificeer gewijzigde bestanden
-          changed_files=$(git diff --name-only HEAD^..HEAD)
+          # Haal de lijst van gewijzigde PHP-bestanden op
+          php_files="${{ steps.changed-files.outputs.php_files }}"
 
-          # Filter PHP-bestanden
-          php_files=$(echo "$changed_files" | grep '\.php$' || true)
-
-          # Voer PHPStan uit op gewijzigde PHP-bestanden
           if [ -n "$php_files" ]; then
-            phpstan analyse --level=7 --no-progress $php_files
+            # Voer PHPStan uit op de gewijzigde PHP-bestanden
+            vendor/bin/phpstan analyse --level=7 --no-progress $php_files
           else
             echo "Geen PHP-bestanden gewijzigd. PHPStan wordt niet uitgevoerd."
           fi
