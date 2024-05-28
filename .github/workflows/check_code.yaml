@@ -17,8 +17,8 @@ jobs:
           php-version: '8.0'
           extensions: mbstring
 
-        run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
       - name: Install Composer dependencies
+        run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
 
       - name: Get list of changed PHP files
         id: changed-files
