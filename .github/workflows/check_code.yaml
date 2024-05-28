@@ -18,7 +18,7 @@ jobs:
           extensions: mbstring
 
       - name: Install Composer dependencies
-        run: composer install phpstan/phpstan --no-dev --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --classmap-authoritative --no-scripts --no-plugins --no-progress
+        run: composer require phpstan/phpstan --no-dev --no-interaction --no-progress --no-suggest --prefer-dist --optimize-autoloader --classmap-authoritative --no-scripts --no-plugins --no-progress
 
       - name: Get list of changed PHP files
         id: changed-files
