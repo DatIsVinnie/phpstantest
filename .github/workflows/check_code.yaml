@@ -1,42 +1,30 @@
-# .github/workflows/phpstan.yml
 name: PHPStan
-          
+
 on: [pull_request]
 
 jobs:
   phpstan:
+    name: Run PHPStan
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up PHP
-        uses: shivammathur/setup-php@v2
-        with:
-          php-version: '8.0'
-          extensions:
-            bz2, curl, exif, fileinfo, ftp, gd, gettext, gmp, imap, intl, ldap, mbstring, mysqli, odbc,
-            openssl, pdo_mysql, pdo_sqlite, soap, sockets, sqlite3, tidy, xsl, opcache, xdebug
-
-      - name: Install dependencies
-        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
-
-      - name: Get list of changed PHP files
-        id: changed-files
-        uses: octokit/request-action@v2.x
-        with:
-          route: GET /repos/${{ github.repository }}/pulls/${{ github.event.number }}/files
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Set execute permissions for PHPStan
-        run: chmod +x vendor/bin/phpstan
-
-      - name: Debug changed files
-        run: echo "${{ steps.changed-files.outputs.files }}"
+      - name: Setup PHPStan
+        uses: docker://phpstan/phpstan
 
       - name: Run PHPStan
         run: |
-          files="${{ steps.changed-files.outputs.files }}"
-          vendor/bin/phpstan analyse $FILES
+          # Identificeer gewijzigde bestanden
+          changed_files=$(git diff --name-only HEAD^..HEAD)
+
+          # Filter PHP-bestanden
+          php_files=$(echo "$changed_files" | grep '\.php$' || true)
+
+          # Voer PHPStan uit op gewijzigde PHP-bestanden
+          if [ -n "$php_files" ]; then
+            phpstan analyse --level=7 --no-progress $php_files
+          else
+            echo "Geen PHP-bestanden gewijzigd. PHPStan wordt niet uitgevoerd."
+          fi
