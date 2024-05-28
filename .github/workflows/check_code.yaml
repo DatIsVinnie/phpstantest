@@ -1,0 +1,46 @@
+# .github/workflows/phpstan.yml
+name: PHPStan
+
+on: [pull_request]
+
+jobs:
+  phpstan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.0'
+          extensions:
+            bz2, curl, exif, fileinfo, ftp, gd, gettext, gmp, imap, intl, ldap, mbstring, mysqli, odbc,
+            openssl, pdo_mysql, pdo_sqlite, soap, sockets, sqlite3, tidy, xsl, opcache, xdebug
+
+      - name: Install dependencies
+        run: composer install --no-progress --no-suggest --prefer-dist --optimize-autoloader
+
+      - name: Get list of changed PHP files
+        id: changed-files
+        uses: octokit/request-action@v2.x
+        with:
+          route: GET /repos/${{ github.repository }}/pulls/${{ github.event.number }}/files
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          php_files=$(jq -r '.[] | select(.filename | endswith(".php")) | .filename' $GITHUB_EVENT_PATH)
+          echo "::set-output name=files::$php_files"
+
+      
+      - name: Set execute permissions for PHPStan
+        run: chmod +x vendor/bin/phpstan
+
+      - name: Run PHPStan
+        run: |
+          if [ -n "$FILES" ]; then
+            vendor/bin/phpstan analyse $FILES
+          else
+            echo "No PHP files were modified."
+          fi
