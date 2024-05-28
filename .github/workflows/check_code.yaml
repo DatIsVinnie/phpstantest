@@ -35,11 +35,7 @@ jobs:
 
       - name: Run PHPStan
         run: |
-          if [ -n "$FILES" ]; then
             vendor/bin/phpstan analyse $FILES
-          else
-            echo "No PHP files were modified."
-          fi
         env:
           FILES: ${{ steps.changed-files.outputs.files }}
 
