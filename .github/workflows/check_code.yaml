@@ -21,5 +21,5 @@ jobs:
         run: |
           vendor/bin/phpstan analyse --level=7 --no-progress $CHANGED_FILES
         env:
-          CHANGED_FILES: $(git diff --name-only --diff-filter=d main | grep '\.php$')
+          CHANGED_FILES: $(git diff --diff-filter=d main | grep '\.php$')
  
