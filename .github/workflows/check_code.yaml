@@ -1,4 +1,4 @@
-name: PHPStan
+name: check_pull_request_code
 
 on: [pull_request]
 
