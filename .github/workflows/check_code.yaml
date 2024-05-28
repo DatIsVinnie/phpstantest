@@ -1,25 +1,23 @@
-name: PHPStan
-
-on: [pull_request]
-
 jobs:
   phpstan:
-    name: Run PHPStan
     runs-on: ubuntu-latest
-  
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
-  
+
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '8.0'
-          extensions: mbstring
-  
-      - name: Install Composer dependencies
-        run: composer require phpstan/phpstan --dev --no-progress --no-suggest --no-interaction
+          php-version: '7.4' # Of de versie die je nodig hebt
 
-      - name: Run PHPStan
+      - name: Install dependencies
+        run: composer require --dev phpstan/phpstan
+
+      - name: Run PHPStan on changed files
         run: |
-          vendor/bin/phpstan analyse --level=7 --no-progress $(git diff --name-only -- main)
+          CHANGED_FILES=$(git diff --name-only --diff-filter=d origin/main...HEAD | grep '\.php$')
+          if [ -n "$CHANGED_FILES" ]; then
+            vendor/bin/phpstan analyse --level=7 --no-progress $CHANGED_FILES
+          else
+            echo "No PHP files changed."
+          fi
