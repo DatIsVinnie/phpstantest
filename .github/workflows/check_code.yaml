@@ -29,17 +29,12 @@ jobs:
           route: GET /repos/${{ github.repository }}/pulls/${{ github.event.number }}/files
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          php_files=$(jq -r '.[] | select(.filename | endswith(".php")) | .filename' $GITHUB_EVENT_PATH)
-          echo "::set-output name=files::$php_files"
 
-      
       - name: Set execute permissions for PHPStan
         run: chmod +x vendor/bin/phpstan
 
 
       - name: Run PHPStan
-        uses: OskarStark/phpstan-ga@1.13.0      
         run: |
           if [ -n "$FILES" ]; then
             vendor/bin/phpstan analyse $FILES
