@@ -12,7 +12,7 @@ jobs:
       - name: Set up PHP
         uses: shivammathur/setup-php@v2
         with:
-          php-version: '7.4' # Of de versie die je nodig hebt
+          php-version: '8'
 
       - name: Install dependencies
         run: composer require --dev phpstan/phpstan
@@ -32,7 +32,7 @@ jobs:
         run: |
           CHANGED_FILES=$(cat changed_files.txt)
           if [ -n "$CHANGED_FILES" ]; then
-            vendor/bin/phpstan analyse --level=7 --no-progress $CHANGED_FILES
+            vendor/bin/phpstan analyse --level=7 --no-progress --error-format raw $CHANGED_FILES | grep -E '^\s*(\[(\w+)\]|\((\w+)\)|PHP\s*(Parse|Fatal|Compile)\s*error)'
           else
             echo "No PHP files changed."
           fi
